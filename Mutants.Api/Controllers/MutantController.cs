@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Mutants.Api.Request;
+using Mutants.Api.Dtos;
 using Mutants.Model;
 
 namespace Mutants.Api.Controllers
@@ -18,9 +18,7 @@ namespace Mutants.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> IsMutant(DnaRequest dna)
         {
-            if (_mutant.IsMutant(dna.Dna))
-                return StatusCode(200);            
-            return StatusCode(403);
+            return StatusCode(_mutant.IsMutant(dna.Dna) ? 200 : 403);
         }
     }
 }

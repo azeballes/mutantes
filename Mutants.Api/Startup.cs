@@ -21,6 +21,10 @@ namespace Mutants.Api
         {
             services.AddControllers();
             services.AddSingleton<Mutant>();
+            /*
+            services.AddDbContext<MutantContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MutantContext")));
+                */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

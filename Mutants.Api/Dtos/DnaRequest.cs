@@ -1,4 +1,4 @@
-﻿namespace Mutants.Api.Request
+﻿namespace Mutants.Api.Dtos
 {
     public class DnaRequest
     {
