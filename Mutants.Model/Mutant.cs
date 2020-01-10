@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mutants.Data;
 
 namespace Mutants.Model
 {
     public class Mutant
     {
+        private readonly IMutantRepository _mutantRepository;
         private const int NumberOfConsecutiveChars = 4;
         private const int MinNumberOfSequencesToBeMutant = 2;
         public static readonly string MustBeIndicateDnaMessage = "Debe indicar una cadena de ADN";
@@ -13,12 +15,23 @@ namespace Mutants.Model
         public static readonly string ValidDnaCharsMessage = "La cadena de ADN sólo debe contener los caracteres (A,T,C,G)";
         public static char[] ValidChars = {'A','C','G','T'};
 
-        public bool IsMutant(string [] dna)
+        public Mutant(IMutantRepository mutantRepository)
         {
-            return ValidateDna(dna) && AllSequencesFound(dna) > 1;
+            _mutantRepository = mutantRepository;
         }
 
-        private static bool ValidateDna(IReadOnlyCollection<string> dna)
+        public bool IsMutant(string [] dna)
+        {
+            ValidateDna(dna);
+            var dnaEntity = _mutantRepository.FindByDna(dna);
+            if (dnaEntity != null)
+                return dnaEntity.Mutant;
+            var isMutant =  AllSequencesFound(dna) > 1;
+            _mutantRepository.Save(dna, isMutant);
+            return isMutant;
+        }
+
+        private static void ValidateDna(IReadOnlyCollection<string> dna)
         {
             if  (dna == null || dna.Count == 0)
                 throw new Exception(MustBeIndicateDnaMessage);
@@ -28,8 +41,7 @@ namespace Mutants.Model
             
             if (!OnlyContainsChars( dna, ValidChars))
                 throw new Exception(ValidDnaCharsMessage);
-
-            return dna.Count >= NumberOfConsecutiveChars;
+            
         }
 
         private static int NumberOfSequencesInColumns(IReadOnlyCollection<string> matrix)
@@ -109,6 +121,26 @@ namespace Mutants.Model
                 y += incrementY;
             }
             return consecutiveEqualChars == NumberOfConsecutiveChars ? 1 : 0;
+        }
+
+        public MutantStats Stats()
+        {
+            var result = from adns in _mutantRepository.AsQueryable()
+                group adns by adns.Mutant
+                into m
+                select new
+                {
+                    mutant = m.Key
+                    ,
+                    quantity = m.Count()
+                };
+            var stats = result.ToList();
+
+            if (stats.Count == 0)
+                return new MutantStats();
+
+            return new MutantStats(stats.FirstOrDefault(r => r.mutant)?.quantity ?? 0L
+                , stats.FirstOrDefault(r => !r.mutant)?.quantity ?? 0L);
         }
     }
 }

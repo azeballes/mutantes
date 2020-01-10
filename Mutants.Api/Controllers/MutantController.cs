@@ -6,7 +6,6 @@ using Mutants.Model;
 namespace Mutants.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
     public class MutantController : ControllerBase
     {
         private readonly Mutant _mutant;
@@ -16,9 +15,17 @@ namespace Mutants.Api.Controllers
         }
         
         [HttpPost]
+        [Route("[controller]")]
         public async Task<ActionResult> IsMutant(DnaRequest dna)
         {
             return StatusCode(_mutant.IsMutant(dna.Dna) ? 200 : 403);
+        }
+
+        [HttpGet]
+        [Route("stats")]
+        public async Task<StatsResponse> DoGet()
+        {
+            return new StatsResponse(_mutant.Stats());
         }
     }
 }

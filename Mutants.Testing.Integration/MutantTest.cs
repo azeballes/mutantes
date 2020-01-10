@@ -1,24 +1,29 @@
+using System.Collections.Generic;
 using System.Linq;
+using FizzWare.NBuilder;
+using Mutants.Data;
 using Mutants.Model;
 using Xunit;
 
 namespace Mutants.Testing.Integration
 {
-    public class MutantRepositoryTest : IClassFixture<MutantContextFixture>
+    public class MutantTest : IClassFixture<MutantContextFixture>
     {
         private readonly MutantContextFixture _context;
-        private readonly MutantRepository _sut;
+        private readonly Mutant _sut;
+        private readonly MutantRepository _mutantRepository;
 
-        public MutantRepositoryTest(MutantContextFixture context)
+        public MutantTest(MutantContextFixture context)
         {
             _context = context;
-            _sut = new MutantRepository(context.Context);
+            _mutantRepository = new MutantRepository(_context.Context);
+            _sut = new Mutant(_mutantRepository);
             DeleteAllAdns();
         }
 
         private void DeleteAllAdns()
         {
-            _context.Context.RemoveRange( _context.Context.Adns );
+            _context.Context.RemoveRange( _context.Context.DnaSet );
             _context.Context.SaveChanges();
         }
 
@@ -42,7 +47,17 @@ namespace Mutants.Testing.Integration
             Assert.Equal(0.00m, stats.Ratio);
         }
 
-        private void CreateAdnInRepository(bool mutant) => _sut.Save("{\"adn\":[\"A\",\"T\"]}", mutant);
+        private void CreateAdnInRepository(bool mutant)
+        {
+            _mutantRepository.Save(AnyDna(), mutant);
+        }
+
+        private string[] AnyDna()
+        {
+            var generator = new RandomGenerator();
+
+            return Enumerable.Range(1, 10).Select(i => generator.Phrase(10)).ToArray();
+        }
 
         [Fact]
         public void StatsWithOneMutantShouldSuccess()

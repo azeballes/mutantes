@@ -4,8 +4,8 @@ namespace Mutants.Data
 {
     public class MutantContext : DbContext
     {
-        public MutantContext(DbContextOptions<MutantContext> options) : base(options) { }
+        public MutantContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Adn> Adns { get; set; }
+        public DbSet<Dna> DnaSet { get; set; }
     }
 }

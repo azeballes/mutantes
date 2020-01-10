@@ -1,9 +1,19 @@
-﻿using System.Text.Json.Serialization;
+﻿using Mutants.Model;
+using System.Text.Json.Serialization;
 
 namespace Mutants.Api.Dtos
 {
     public class StatsResponse
     {
+        private MutantStats mutantStats;
+
+        public StatsResponse(MutantStats mutantStats)
+        {
+            Mutants = mutantStats.Mutants;
+            Humans = mutantStats.Humans;
+            Ratio = mutantStats.Ratio;
+        }
+
         [JsonPropertyName("count_mutant_dna")]
         public long Mutants { get; }
         [JsonPropertyName("count_human_dna")]
