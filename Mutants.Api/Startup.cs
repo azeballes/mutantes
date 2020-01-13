@@ -24,9 +24,13 @@ namespace Mutants.Api
             services.AddControllers();
             services.AddScoped<Mutant>();
             services.AddScoped<IMutantRepository, MutantRepository>();
-            
-            services.AddDbContext<MutantContext>(options =>
+            //services.AddSingleton<Mutant>();
+            //services.AddSingleton<IMutantRepository, MutantRepository>();
+
+            services.AddDbContextPool<MutantContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MutantContext")));
+            //services.AddDbContext<MutantContext>(options =>
+                //options.UseSqlServer(Configuration.GetConnectionString("MutantContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
