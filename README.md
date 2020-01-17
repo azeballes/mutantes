@@ -1,12 +1,32 @@
-# mutantes
+# API Mutantes
+
+## Ejecución de la api
+
+Ejemplos de ejecución de la api
+
+> Base url api-mutantes http://104.197.183.69
+
+```powershell
+##Estadísticas
+Invoke-WebRequest -Uri http://104.197.183.69/stats
+
+##Ejemplo para adn de humano
+Invoke-WebRequest -Method POST -Uri http://104.197.183.69/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATTT"",""AGACGG"",""GCGTCA"",""TCACTG""]}"
+
+##Ejemplo para adn de mutante
+Invoke-WebRequest -Method POST -Uri http://104.197.183.69/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATGT"",""AGGAGG"",""CCCCTA"",""TCACTG""]}"
+```
 
 ## Análisis de cobertura de código
 ```powershell
+#Ejecución de todos los test en la solución
+dotnet test .\Mutants.sln --results-directory:.\Test
+
 #Ejecución de test unitarios
 dotnet test .\Mutants.Testing.Unit\ --results-directory:.\Test --collect:"Code Coverage"
 
 #Conversión de *.coverage a xml
-& "$env:userprofile\.nuget\packages\microsoft.codecoverage\16.4.0\build\netstandard1.0\CodeCoverage\CodeCoverage.exe" analyze /output:.\Test\UnitTesting.coveragexml  .\Test\78bf6fe2-9434-46f1-962d-60fe69ac80ca\AZ22207_SP000LP796_2020-01-07.19_15_59.coverage
+& "$env:userprofile\.nuget\packages\microsoft.codecoverage\16.4.0\build\netstandard1.0\CodeCoverage\CodeCoverage.exe" analyze /output:.\Test\UnitTesting.coveragexml  .\Test\d1c5a5b8-76c5-4288-8150-34b2bffbbf0f\AZ22207_SP000LP796_2020-01-16.20_34_52.coverage
 
 #Instalo la herramienta global reportgenerator
 dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.4.0
@@ -14,4 +34,3 @@ dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.4.0
 #Generación de reporte html de cobertura
 reportgenerator "-reports:UnitTesting.coveragexml" "-targetdir:.\Html" -reporttypes:Html
 ```
-

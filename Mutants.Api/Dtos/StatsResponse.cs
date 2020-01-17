@@ -5,8 +5,6 @@ namespace Mutants.Api.Dtos
 {
     public class StatsResponse
     {
-        private MutantStats mutantStats;
-
         public StatsResponse(MutantStats mutantStats)
         {
             Mutants = mutantStats.Mutants;

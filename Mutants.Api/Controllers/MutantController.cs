@@ -16,14 +16,14 @@ namespace Mutants.Api.Controllers
         
         [HttpPost]
         [Route("[controller]")]
-        public async Task<ActionResult> IsMutant(DnaRequest dna)
+        public ActionResult IsMutant(DnaRequest dna)
         {
             return StatusCode(_mutant.IsMutant(dna.Dna) ? 200 : 403);
         }
 
         [HttpGet]
         [Route("stats")]
-        public async Task<StatsResponse> DoGet()
+        public StatsResponse DoGet()
         {
             return new StatsResponse(_mutant.Stats());
         }

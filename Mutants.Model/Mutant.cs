@@ -26,7 +26,7 @@ namespace Mutants.Model
             var dnaEntity = _mutantRepository.FindByDna(dna);
             if (dnaEntity != null)
                 return dnaEntity.Mutant;
-            var isMutant =  AllSequencesFound(dna) > 1;
+            var isMutant =  AnalizeIfIsMutant(dna);
             _mutantRepository.Save(dna, isMutant);
             return isMutant;
         }
@@ -54,12 +54,23 @@ namespace Mutants.Model
             return matrix.Select((t, y) => LineContainsConsecutiveChars(matrix, 0, y, (i, j) => i < matrix.Count, 1, incrementY:0)).Sum();
         }
 
-        public int AllSequencesFound(IReadOnlyCollection<string> matrix)
-        {
-            return NumberOfSequencesInRows(matrix)
-                + NumberOfSequencesInColumns(matrix) 
-                + NumberOfSequencesInLeftToRightObliqueLines(matrix) 
-                + NumberOfSequencesInRightToLeftObliqueLines(matrix);
+        Func<IReadOnlyCollection<string>, int> [] MethodArray() =>
+            new Func<IReadOnlyCollection<string>, int> [] {
+                    m => NumberOfSequencesInRows(m)
+                    , m => NumberOfSequencesInColumns(m) 
+                    , m => NumberOfSequencesInLeftToRightObliqueLines(m) 
+                    , m => NumberOfSequencesInRightToLeftObliqueLines(m)
+                };
+
+        private bool AnalizeIfIsMutant(IReadOnlyCollection<string> matrix)
+        {            
+            var sequencesFound = 0;
+            foreach( var f in MethodArray() ){
+                sequencesFound += f(matrix);
+                if ( sequencesFound >= MinNumberOfSequencesToBeMutant )
+                    return true;
+            }
+            return false;
         }
 
         private static bool IsMatrix(IReadOnlyCollection<string> dna) => dna.All(s => s.Length == dna.Count);
