@@ -17,7 +17,15 @@ Invoke-WebRequest -Method POST -Uri http://104.197.183.69/mutant -Headers @{"Con
 Invoke-WebRequest -Method POST -Uri http://104.197.183.69/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATGT"",""AGGAGG"",""CCCCTA"",""TCACTG""]}"
 ```
 
+## Diagrama de sequencia
+
+![Sequence.png](Sequence.png)
+
+
 ## Análisis de cobertura de código
+
+[Summary - Coverage Report.pdf](./Summary%20-%20Coverage%20Report.pdf)
+
 ```powershell
 #Ejecución de todos los test en la solución
 dotnet test .\Mutants.sln --results-directory:.\Test
