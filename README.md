@@ -4,17 +4,17 @@
 
 Ejemplos de ejecución de la api
 
-> Base url api-mutantes http://104.197.183.69
+> Base url api-mutantes http://35.223.243.79
 
 ```powershell
 ##Estadísticas
-Invoke-WebRequest -Uri http://104.197.183.69/stats
+Invoke-WebRequest -Uri http://35.223.243.79/stats
 
 ##Ejemplo para adn de humano
-Invoke-WebRequest -Method POST -Uri http://104.197.183.69/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATTT"",""AGACGG"",""GCGTCA"",""TCACTG""]}"
+Invoke-WebRequest -Method POST -Uri http://35.223.243.79/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATTT"",""AGACGG"",""GCGTCA"",""TCACTG""]}"
 
 ##Ejemplo para adn de mutante
-Invoke-WebRequest -Method POST -Uri http://104.197.183.69/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATGT"",""AGGAGG"",""CCCCTA"",""TCACTG""]}"
+Invoke-WebRequest -Method POST -Uri http://35.223.243.79/mutant -Headers @{"Content-Type" = "application/json"} -Body "{""dna"" : [""ATGCGA"",""CAGTGC"",""TTATGT"",""AGGAGG"",""CCCCTA"",""TCACTG""]}"
 ```
 
 ## Diagrama de sequencia

@@ -75,7 +75,7 @@ namespace Mutants.Model
 
         private static bool IsMatrix(IReadOnlyCollection<string> dna) => dna.All(s => s.Length == dna.Count);
 
-        private static bool OnlyContainsChars(IReadOnlyCollection<string> matrix, IEnumerable<char> chars)
+        private static bool OnlyContainsChars(IEnumerable<string> matrix, IEnumerable<char> chars)
         {
             return matrix.All(row => row.All(c => chars.Any(validChar => validChar == c)));
         }
